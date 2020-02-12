@@ -1,0 +1,29 @@
+/* .modal-self {
+  height: 22rem;
+  position: relative;
+} */
+
+.name-div {
+  display: flex;
+  flex-direction: column;
+}
+
+.address-div {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.submit-button {
+  margin-right: 3rem !important;
+}
+
+.alert-message {
+  color: white;
+  font-weight: bold;
+}

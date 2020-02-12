@@ -1,0 +1,5 @@
+@media only screen and (max-width: 500px) {
+  .button-in-table {
+    padding: 0.7em 0.3rem !important;
+  }
+}
