@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CommerceStore.Data;
 using CommerceStore.Models;
+using System;
 
 namespace CommerceStore.Controllers
 {
@@ -23,16 +22,48 @@ namespace CommerceStore.Controllers
 
         // GET: api/Sales
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Sales>>> GetSales()
+        public async Task<ActionResult<IEnumerable<SalesDTO>>> GetSales()
         {
-            return await _context.Sales.ToListAsync();
+            return await _context.Sales
+                .Include(s => s.Customer)
+                .Include(s => s.Product)
+                .Include(s => s.Store)
+                .Select(s =>
+                   new SalesDTO()
+                   {
+                       Id = s.Id,
+                       CustomerId = s.CustomerId,
+                       ProductId = s.ProductId,
+                       StoreId = s.StoreId,
+                       DateSold = s.DateSold,
+                       CustomerName = s.Customer.Name,
+                       ProductName = s.Product.Name,
+                       StoreName = s.Store.Name
+                   })
+                .ToListAsync();
         }
 
         // GET: api/Sales/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Sales>> GetSales(int id)
+        public async Task<ActionResult<SalesDTO>> GetSales(int id)
         {
-            var sales = await _context.Sales.FindAsync(id);
+            var sales = await _context.Sales
+                .Include(s => s.Customer)
+                .Include(s => s.Product)
+                .Include(s => s.Store)
+                .Select(s =>
+                   new SalesDTO()
+                   {
+                       Id = s.Id,
+                       CustomerId = s.CustomerId,
+                       ProductId = s.ProductId,
+                       StoreId = s.StoreId,
+                       DateSold = s.DateSold,
+                       CustomerName = s.Customer.Name,
+                       ProductName = s.Product.Name,
+                       StoreName = s.Store.Name
+                   })
+                .SingleOrDefaultAsync(s => s.Id == id);
 
             if (sales == null)
             {
@@ -46,7 +77,7 @@ namespace CommerceStore.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSales(int id, Sales sales)
+        public async Task<ActionResult<SalesDTO>> PutSales(int id, Sales sales)
         {
             if (id != sales.Id)
             {
@@ -71,19 +102,54 @@ namespace CommerceStore.Controllers
                 }
             }
 
-            return NoContent();
+            _context.Entry(sales).Reference(x => x.Customer).Load();
+            _context.Entry(sales).Reference(x => x.Product).Load();
+            _context.Entry(sales).Reference(x => x.Store).Load();
+
+            var dto = new SalesDTO()
+            {
+                Id = sales.Id,
+                CustomerId = sales.CustomerId,
+                ProductId = sales.ProductId,
+                StoreId = sales.StoreId,
+                DateSold = sales.DateSold,
+                CustomerName = sales.Customer.Name,
+                ProductName = sales.Product.Name,
+                StoreName = sales.Store.Name
+            };
+
+            return dto;
+            //return NoContent();
         }
 
         // POST: api/Sales
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Sales>> PostSales(Sales sales)
+        public async Task<ActionResult<SalesDTO>> PostSales(Sales sales)
         {
+            sales.DateSold = DateTime.Now;
             _context.Sales.Add(sales);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetSales", new { id = sales.Id }, sales);
+            _context.Entry(sales).Reference(x => x.Customer).Load();
+            _context.Entry(sales).Reference(x => x.Product).Load();
+            _context.Entry(sales).Reference(x => x.Store).Load();
+
+            var dto = new SalesDTO()
+            {
+                Id = sales.Id,
+                CustomerId = sales.CustomerId,
+                ProductId = sales.ProductId,
+                StoreId = sales.StoreId,
+                DateSold = sales.DateSold,
+                CustomerName = sales.Customer.Name,
+                ProductName = sales.Product.Name,
+                StoreName = sales.Store.Name
+            };
+
+            //return CreatedAtRoute("GetSales", new { id = sales.Id }, dto);
+            return dto;
         }
 
         // DELETE: api/Sales/5

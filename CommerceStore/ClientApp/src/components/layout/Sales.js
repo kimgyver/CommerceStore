@@ -1,59 +1,68 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
+//import EditSaleModal from '../modals/EditSaleModal';
+//import CreateSaleModal from '../modals/CreateSaleModal';
+import DeleteSaleModal from '../modals/DeleteSaleModal';
+import './Layout.css';
 
-export class Sales extends Component {
-  //static displayName = FetchData.name;
+const Sales = () => {
+  const [sales, setSales] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  constructor(props) {
-    super(props);
-    this.state = { forecasts: [], loading: true };
-  }
+  useEffect(() => {
+    populateWeatherData();
+  }, []);
 
-  componentDidMount() {
-    this.populateWeatherData();
-  }
-
-  static renderForecastsTable(forecasts) {
-    return (
-      <table className='table table-striped' aria-labelledby="tabelLabel">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Temp. (F)</th>
-            <th>Summary</th>
-          </tr>
-        </thead>
-        <tbody>
-          {forecasts.map(forecast =>
-            <tr key={forecast.date}>
-              <td>{forecast.date}</td>
-              <td>{forecast.temperatureC}</td>
-              <td>{forecast.temperatureF}</td>
-              <td>{forecast.summary}</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    );
-  }
-
-  render() {
-    let contents = this.state.loading
-      ? <p><em>Loading...</em></p>
-      : Sales.renderForecastsTable(this.state.forecasts);
-
-    return (
-      <div>
-        <h1 id="tabelLabel" >Weather forecast</h1>
-        <p>This component demonstrates fetching data from the server.</p>
-        {contents}
-      </div>
-    );
-  }
-
-  async populateWeatherData() {
-    const response = await fetch('weatherforecast');
+  const populateWeatherData = async () => {
+    const response = await fetch('api/sales');
     const data = await response.json();
-    this.setState({ forecasts: data, loading: false });
-  }
-}
+    setSales(data);
+    setLoading(false);
+  };
+
+  let contents = loading ? (
+    <p>
+      <em>Loading...</em>
+    </p>
+  ) : (
+    <table className='table table-striped sales' aria-labelledby='tabelLabel'>
+      <thead>
+        <tr>
+          <th className='customer-th'>Customer</th>
+          <th className='product-th'>Product</th>
+          <th className='store-th'>Stoer</th>
+          <th className='datesold-th'>Date Sold</th>
+          <th className='edit-th'>Edit</th>
+          <th className='delete-th'>Delete</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {sales.map(sale => (
+          <tr key={sale.id}>
+            <td>{sale.customerName}</td>
+            <td>{sale.productName}</td>
+            <td>{sale.storeName}</td>
+            <td>{sale.dateSold}</td>
+            <td>
+              {/* <EditSaleModal sale={sale} sales={sales} setSales={setSales} /> */}
+            </td>
+            <td>
+              <DeleteSaleModal sale={sale} sales={sales} setSales={setSales} />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+
+  return (
+    <div>
+      <h3 id='tabelLabel'>Sales</h3>
+      {/* <CreateSaleModal sales={sales} setSales={setSales} /> */}
+      <p />
+      {contents}
+    </div>
+  );
+};
+
+export default Sales;

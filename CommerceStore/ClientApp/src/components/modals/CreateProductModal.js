@@ -3,57 +3,59 @@ import { Button, Modal, Input } from 'semantic-ui-react';
 import './Modals.css';
 import '../layout/Layout.css';
 
-const EditCustomerModal = ({ customer, customers, setCustomers }) => {
+const CreateProductModal = ({ products, setProducts }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [name, setName] = useState(customer.name);
-  const [address, setAddress] = useState(customer.address);
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState(0);
 
   const handleOpen = () => setModalOpen(true);
   const handleClose = () => setModalOpen(false);
 
   const changeData = async () => {
-    customer.name = name.trim();
-    customer.address = address.trim();
-    console.log(JSON.stringify(customer));
+    let product = { name: name.trim(), price: Number(price) };
+    //console.log(JSON.stringify(product));
 
-    const response = await fetch(`api/customers/${customer.id}`, {
-      method: 'PUT',
-      body: JSON.stringify(customer),
+    const response = await fetch(`api/products`, {
+      method: 'POST',
+      //body: JSON.stringify(product),
+      body: `{ "name": "${product.name}", "price": ${product.price} }`,
       headers: {
         'Content-Type': 'application/json'
       }
     });
 
-    // process error
+    //console.log(response.clone().json());
+    //process error
     if (response.ok !== true) {
-      if (response.status === 400) {
-        console.log('Customer Not Found');
-        errorMessage('Customer Not Found');
-      } else {
-        errorMessage(
-          `Customer Modification Failed. Status No.: ${response.status}`
-        );
-      }
+      console.log(`Product Creation Failed. Status No.: ${response.status}`);
+      errorMessage(`Product Creation Failed. Status No.: ${response.status}`);
     }
 
-    // update customer list state
-    setCustomers(customers.map(c => (c.id === customer.id ? customer : c)));
+    const data = await response.clone().json();
+    console.log(data);
+
+    // update product list state
+    setProducts([data, ...products]);
   };
 
   const onSubmit = e => {
     e.preventDefault();
-    if (name.trim() === '' || address.trim() === '') {
+    if (name.trim() === '' || price.trim() === '') {
       errorMessage('Please enter all fields');
       return false;
-    } else {
-      changeData();
     }
+    if (isNaN(price)) {
+      errorMessage('Price should be numeric');
+      return false;
+    }
+
+    changeData();
     handleClose();
   };
 
   const onClose = () => {
-    setName(customer.name);
-    setAddress(customer.address);
+    setName('');
+    setPrice(0);
 
     handleClose();
   };
@@ -73,8 +75,8 @@ const EditCustomerModal = ({ customer, customers, setCustomers }) => {
   return (
     <Modal
       trigger={
-        <Button color='yellow' onClick={handleOpen} className='button-in-table'>
-          Edit
+        <Button color='blue' onClick={handleOpen}>
+          New Product
         </Button>
       }
       open={modalOpen}
@@ -84,7 +86,7 @@ const EditCustomerModal = ({ customer, customers, setCustomers }) => {
         position: 'relative'
       }}
     >
-      <Modal.Header>Modify Customer</Modal.Header>
+      <Modal.Header>Create Product</Modal.Header>
       <div className='alert-message' />
       <Modal.Content>
         <Modal.Description>
@@ -99,19 +101,19 @@ const EditCustomerModal = ({ customer, customers, setCustomers }) => {
                 placeholder='Name'
               />
             </div>
-            <div className='address-div'>
-              <label htmlFor='address'>Address: </label>
+            <div className='price-div'>
+              <label htmlFor='price'>Price: </label>
               <Input
-                name='address'
-                value={address}
-                onChange={e => setAddress(e.target.value)}
-                placeholder='Adderss'
+                name='price'
+                value={price}
+                onChange={e => setPrice(e.target.value)}
+                placeholder='Price'
               />
             </div>
             <br />
             <div className='buttons'>
               <Button type='submit' color='blue' className='submit-button'>
-                Modify
+                Create
               </Button>
               <Button type='button' color='grey' onClick={onClose}>
                 Cancel
@@ -124,4 +126,4 @@ const EditCustomerModal = ({ customer, customers, setCustomers }) => {
   );
 };
 
-export default EditCustomerModal;
+export default CreateProductModal;

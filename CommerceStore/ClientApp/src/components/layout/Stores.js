@@ -1,59 +1,72 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
+import EditStoreModal from '../modals/EditStoreModal';
+import CreateStoreModal from '../modals/CreateStoreModal';
+import DeleteStoreModal from '../modals/DeleteStoreModal';
+import './Layout.css';
 
-export class Stores extends Component {
-  //static displayName = FetchData.name;
+const Stores = () => {
+  const [stores, setStores] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  constructor(props) {
-    super(props);
-    this.state = { forecasts: [], loading: true };
-  }
+  useEffect(() => {
+    populateWeatherData();
+  }, []);
 
-  componentDidMount() {
-    this.populateWeatherData();
-  }
-
-  static renderForecastsTable(forecasts) {
-    return (
-      <table className='table table-striped' aria-labelledby="tabelLabel">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Temp. (F)</th>
-            <th>Summary</th>
-          </tr>
-        </thead>
-        <tbody>
-          {forecasts.map(forecast =>
-            <tr key={forecast.date}>
-              <td>{forecast.date}</td>
-              <td>{forecast.temperatureC}</td>
-              <td>{forecast.temperatureF}</td>
-              <td>{forecast.summary}</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    );
-  }
-
-  render() {
-    let contents = this.state.loading
-      ? <p><em>Loading...</em></p>
-      : Stores.renderForecastsTable(this.state.forecasts);
-
-    return (
-      <div>
-        <h1 id="tabelLabel" >Weather forecast</h1>
-        <p>This component demonstrates fetching data from the server.</p>
-        {contents}
-      </div>
-    );
-  }
-
-  async populateWeatherData() {
-    const response = await fetch('weatherforecast');
+  const populateWeatherData = async () => {
+    const response = await fetch('api/stores');
     const data = await response.json();
-    this.setState({ forecasts: data, loading: false });
-  }
-}
+    setStores(data);
+    setLoading(false);
+  };
+
+  let contents = loading ? (
+    <p>
+      <em>Loading...</em>
+    </p>
+  ) : (
+    <table className='table table-striped stores' aria-labelledby='tabelLabel'>
+      <thead>
+        <tr>
+          <th className='name-th'>Name</th>
+          <th className='address-th'>Address</th>
+          <th className='edit-th'>Edit</th>
+          <th className='delete-th'>Delete</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {stores.map(store => (
+          <tr key={store.id}>
+            <td>{store.name}</td>
+            <td>{store.address}</td>
+            <td>
+              <EditStoreModal
+                store={store}
+                stores={stores}
+                setStores={setStores}
+              />
+            </td>
+            <td>
+              <DeleteStoreModal
+                store={store}
+                stores={stores}
+                setStores={setStores}
+              />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+
+  return (
+    <div>
+      <h3 id='tabelLabel'>Stores</h3>
+      <CreateStoreModal stores={stores} setStores={setStores} />
+      <p />
+      {contents}
+    </div>
+  );
+};
+
+export default Stores;

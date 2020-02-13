@@ -1,59 +1,75 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
+import EditProductModal from '../modals/EditProductModal';
+import CreateProductModal from '../modals/CreateProductModal';
+import DeleteProductModal from '../modals/DeleteProductModal';
+import './Layout.css';
 
-export class Products extends Component {
-  //static displayName = FetchData.name;
+const Products = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  constructor(props) {
-    super(props);
-    this.state = { forecasts: [], loading: true };
-  }
+  useEffect(() => {
+    populateWeatherData();
+  }, []);
 
-  componentDidMount() {
-    this.populateWeatherData();
-  }
-
-  static renderForecastsTable(forecasts) {
-    return (
-      <table className='table table-striped' aria-labelledby="tabelLabel">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Temp. (F)</th>
-            <th>Summary</th>
-          </tr>
-        </thead>
-        <tbody>
-          {forecasts.map(forecast =>
-            <tr key={forecast.date}>
-              <td>{forecast.date}</td>
-              <td>{forecast.temperatureC}</td>
-              <td>{forecast.temperatureF}</td>
-              <td>{forecast.summary}</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    );
-  }
-
-  render() {
-    let contents = this.state.loading
-      ? <p><em>Loading...</em></p>
-      : Products.renderForecastsTable(this.state.forecasts);
-
-    return (
-      <div>
-        <h1 id="tabelLabel" >Weather forecast</h1>
-        <p>This component demonstrates fetching data from the server.</p>
-        {contents}
-      </div>
-    );
-  }
-
-  async populateWeatherData() {
-    const response = await fetch('weatherforecast');
+  const populateWeatherData = async () => {
+    const response = await fetch('api/products');
     const data = await response.json();
-    this.setState({ forecasts: data, loading: false });
-  }
-}
+    setProducts(data);
+    setLoading(false);
+  };
+
+  let contents = loading ? (
+    <p>
+      <em>Loading...</em>
+    </p>
+  ) : (
+    <table
+      className='table table-striped products'
+      aria-labelledby='tabelLabel'
+    >
+      <thead>
+        <tr>
+          <th className='name-th'>Name</th>
+          <th className='price-th'>Price</th>
+          <th className='edit-th'>Edit</th>
+          <th className='delete-th'>Delete</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {products.map(product => (
+          <tr key={product.id}>
+            <td>{product.name}</td>
+            <td>${product.price}</td>
+            <td>
+              <EditProductModal
+                product={product}
+                products={products}
+                setProducts={setProducts}
+              />
+            </td>
+            <td>
+              <DeleteProductModal
+                product={product}
+                products={products}
+                setProducts={setProducts}
+              />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+
+  return (
+    <div>
+      <h3 id='tabelLabel'>Products</h3>
+      <CreateProductModal products={products} setProducts={setProducts} />
+      <p />
+      {contents}
+    </div>
+  );
+};
+
+export default Products;

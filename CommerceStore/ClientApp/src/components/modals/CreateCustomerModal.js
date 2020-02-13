@@ -1,7 +1,7 @@
 ﻿import React, { useState } from 'react';
 import { Button, Modal, Input } from 'semantic-ui-react';
-import './EditCustomerModal.css';
-import '../layout/Customers.css';
+import './Modals.css';
+import '../layout/Layout.css';
 
 const CreateCustomerModal = ({ customers, setCustomers }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -25,7 +25,8 @@ const CreateCustomerModal = ({ customers, setCustomers }) => {
 
     //process error
     if (response.ok !== true) {
-      console.log(`Customer Creation Failed. status: ${response.status}`);
+      console.log(`Customer Creation Failed. Status No.: ${response.status}`);
+      errorMessage(`Customer Creation Failed. Status No.: ${response.status}`);
     }
 
     const data = await response.clone().json();
@@ -108,12 +109,11 @@ const CreateCustomerModal = ({ customers, setCustomers }) => {
               <Button type='submit' color='blue' className='submit-button'>
                 Create
               </Button>
-              <Button type='button' color='gray' onClick={onClose}>
+              <Button type='button' color='grey' onClick={onClose}>
                 Cancel
               </Button>
             </div>
           </form>
-          {/* <p>Is it okay to use this photo?</p> */}
         </Modal.Description>
       </Modal.Content>
     </Modal>

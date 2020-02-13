@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from 'semantic-ui-react';
 import EditCustomerModal from '../modals/EditCustomerModal';
 import CreateCustomerModal from '../modals/CreateCustomerModal';
 import DeleteCustomerModal from '../modals/DeleteCustomerModal';
-import './Customers.css';
+import './Layout.css';
 
 const Customers = () => {
   const [customers, setCustomers] = useState([]);
@@ -51,9 +50,6 @@ const Customers = () => {
               />
             </td>
             <td>
-              {/* <Button color='red' className='button-in-table'>
-                Delete
-              </Button> */}
               <DeleteCustomerModal
                 customer={customer}
                 customers={customers}
@@ -69,7 +65,6 @@ const Customers = () => {
   return (
     <div>
       <h3 id='tabelLabel'>Customers</h3>
-      {/* <Button color='blue'>New Customer</Button> */}
       <CreateCustomerModal customers={customers} setCustomers={setCustomers} />
       <p />
       {contents}

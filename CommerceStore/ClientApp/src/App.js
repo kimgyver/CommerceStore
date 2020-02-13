@@ -6,9 +6,9 @@ import { FetchData } from './components/FetchData';
 import { Counter } from './components/Counter';
 
 import Customers from './components/layout/Customers';
-import { Products } from './components/layout/Products';
-import { Stores } from './components/layout/Stores';
-import { Sales } from './components/layout/Sales';
+import Products from './components/layout/Products';
+import Stores from './components/layout/Stores';
+import Sales from './components/layout/Sales';
 
 import './custom.css';
 

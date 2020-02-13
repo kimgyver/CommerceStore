@@ -3,22 +3,22 @@ import { Button, Modal, Input } from 'semantic-ui-react';
 import './Modals.css';
 import '../layout/Layout.css';
 
-const EditCustomerModal = ({ customer, customers, setCustomers }) => {
+const EditStoreModal = ({ store, stores, setStores }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [name, setName] = useState(customer.name);
-  const [address, setAddress] = useState(customer.address);
+  const [name, setName] = useState(store.name);
+  const [address, setAddress] = useState(store.address);
 
   const handleOpen = () => setModalOpen(true);
   const handleClose = () => setModalOpen(false);
 
   const changeData = async () => {
-    customer.name = name.trim();
-    customer.address = address.trim();
-    console.log(JSON.stringify(customer));
+    store.name = name.trim();
+    store.address = address.trim();
+    console.log(JSON.stringify(store));
 
-    const response = await fetch(`api/customers/${customer.id}`, {
+    const response = await fetch(`api/stores/${store.id}`, {
       method: 'PUT',
-      body: JSON.stringify(customer),
+      body: JSON.stringify(store),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -27,17 +27,17 @@ const EditCustomerModal = ({ customer, customers, setCustomers }) => {
     // process error
     if (response.ok !== true) {
       if (response.status === 400) {
-        console.log('Customer Not Found');
-        errorMessage('Customer Not Found');
+        console.log('Store Not Found');
+        errorMessage('Store Not Found');
       } else {
         errorMessage(
-          `Customer Modification Failed. Status No.: ${response.status}`
+          `Store Modification Failed. Status No.: ${response.status}`
         );
       }
     }
 
-    // update customer list state
-    setCustomers(customers.map(c => (c.id === customer.id ? customer : c)));
+    // update store list state
+    setStores(stores.map(s => (s.id === store.id ? store : s)));
   };
 
   const onSubmit = e => {
@@ -52,8 +52,8 @@ const EditCustomerModal = ({ customer, customers, setCustomers }) => {
   };
 
   const onClose = () => {
-    setName(customer.name);
-    setAddress(customer.address);
+    setName(store.name);
+    setAddress(store.address);
 
     handleClose();
   };
@@ -84,7 +84,7 @@ const EditCustomerModal = ({ customer, customers, setCustomers }) => {
         position: 'relative'
       }}
     >
-      <Modal.Header>Modify Customer</Modal.Header>
+      <Modal.Header>Modify Store</Modal.Header>
       <div className='alert-message' />
       <Modal.Content>
         <Modal.Description>
@@ -124,4 +124,4 @@ const EditCustomerModal = ({ customer, customers, setCustomers }) => {
   );
 };
 
-export default EditCustomerModal;
+export default EditStoreModal;

@@ -3,7 +3,7 @@ import { Button, Confirm } from 'semantic-ui-react';
 import './Modals.css';
 import '../layout/Layout.css';
 
-const DeleteCustomerModal = ({ customer, customers, setCustomers }) => {
+const DeleteSaleModal = ({ sale, sales, setSales }) => {
   const [open, setOpen] = useState(false);
 
   const show = () => setOpen(true);
@@ -16,21 +16,21 @@ const DeleteCustomerModal = ({ customer, customers, setCustomers }) => {
   };
 
   const deleteData = async () => {
-    const response = await fetch(`api/customers/${customer.id}`, {
+    const response = await fetch(`api/sales/${sale.id}`, {
       method: 'DELETE'
     });
 
     //process error
     if (response.ok !== true) {
-      console.log(`Customer Remove Failed. status: ${response.status}`);
-      window.alert(`Customer Remove Failed. status: ${response.status}`);
+      console.log(`Sale Remove Failed. status: ${response.status}`);
+      window.alert(`Sale Remove Failed. status: ${response.status}`);
     }
 
     const data = await response.clone().json();
     console.log(data);
 
-    // update customer list state
-    setCustomers(customers.filter(c => c.id !== customer.id));
+    // update sale list state
+    setSales(sales.filter(c => c.id !== sale.id));
   };
 
   return (
@@ -51,4 +51,4 @@ const DeleteCustomerModal = ({ customer, customers, setCustomers }) => {
   );
 };
 
-export default DeleteCustomerModal;
+export default DeleteSaleModal;

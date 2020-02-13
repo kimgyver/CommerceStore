@@ -3,41 +3,37 @@ import { Button, Modal, Input } from 'semantic-ui-react';
 import './Modals.css';
 import '../layout/Layout.css';
 
-const EditCustomerModal = ({ customer, customers, setCustomers }) => {
+const CreateStoreModal = ({ stores, setStores }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [name, setName] = useState(customer.name);
-  const [address, setAddress] = useState(customer.address);
+  const [name, setName] = useState('');
+  const [address, setAddress] = useState('');
 
   const handleOpen = () => setModalOpen(true);
   const handleClose = () => setModalOpen(false);
 
   const changeData = async () => {
-    customer.name = name.trim();
-    customer.address = address.trim();
-    console.log(JSON.stringify(customer));
+    let store = { name: name.trim(), address: address.trim() };
+    console.log(JSON.stringify(store));
 
-    const response = await fetch(`api/customers/${customer.id}`, {
-      method: 'PUT',
-      body: JSON.stringify(customer),
+    const response = await fetch(`api/stores`, {
+      method: 'POST',
+      body: JSON.stringify(store),
       headers: {
         'Content-Type': 'application/json'
       }
     });
 
-    // process error
+    //process error
     if (response.ok !== true) {
-      if (response.status === 400) {
-        console.log('Customer Not Found');
-        errorMessage('Customer Not Found');
-      } else {
-        errorMessage(
-          `Customer Modification Failed. Status No.: ${response.status}`
-        );
-      }
+      console.log(`Store Creation Failed. Status No.: ${response.status}`);
+      errorMessage(`Store Creation Failed. Status No.: ${response.status}`);
     }
 
-    // update customer list state
-    setCustomers(customers.map(c => (c.id === customer.id ? customer : c)));
+    const data = await response.clone().json();
+    console.log(data);
+
+    // update store list state
+    setStores([data, ...stores]);
   };
 
   const onSubmit = e => {
@@ -52,8 +48,8 @@ const EditCustomerModal = ({ customer, customers, setCustomers }) => {
   };
 
   const onClose = () => {
-    setName(customer.name);
-    setAddress(customer.address);
+    setName('');
+    setAddress('');
 
     handleClose();
   };
@@ -73,8 +69,8 @@ const EditCustomerModal = ({ customer, customers, setCustomers }) => {
   return (
     <Modal
       trigger={
-        <Button color='yellow' onClick={handleOpen} className='button-in-table'>
-          Edit
+        <Button color='blue' onClick={handleOpen}>
+          New Store
         </Button>
       }
       open={modalOpen}
@@ -84,7 +80,7 @@ const EditCustomerModal = ({ customer, customers, setCustomers }) => {
         position: 'relative'
       }}
     >
-      <Modal.Header>Modify Customer</Modal.Header>
+      <Modal.Header>Create Store</Modal.Header>
       <div className='alert-message' />
       <Modal.Content>
         <Modal.Description>
@@ -111,7 +107,7 @@ const EditCustomerModal = ({ customer, customers, setCustomers }) => {
             <br />
             <div className='buttons'>
               <Button type='submit' color='blue' className='submit-button'>
-                Modify
+                Create
               </Button>
               <Button type='button' color='grey' onClick={onClose}>
                 Cancel
@@ -124,4 +120,4 @@ const EditCustomerModal = ({ customer, customers, setCustomers }) => {
   );
 };
 
-export default EditCustomerModal;
+export default CreateStoreModal;
