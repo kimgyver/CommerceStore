@@ -9,7 +9,7 @@ namespace CommerceStore.Models
 {
     public class Sales
     {
-        public int Id {get;set;}
+        public int Id { get; set; }
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }
         [ForeignKey("Product")]
@@ -18,6 +18,8 @@ namespace CommerceStore.Models
         public int StoreId { get; set; }
         [DataType(DataType.Date)]
         public DateTime DateSold { get; set; }
+
+        public DateTime CreatedAt {get; set;}
 
         public Customer Customer { get; set; }
         public Product Product { get; set; }

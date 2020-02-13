@@ -25,6 +25,7 @@ namespace CommerceStore.Controllers
         public async Task<ActionResult<IEnumerable<SalesDTO>>> GetSales()
         {
             return await _context.Sales
+                .OrderByDescending(s => s.DateSold)
                 .Include(s => s.Customer)
                 .Include(s => s.Product)
                 .Include(s => s.Store)
@@ -128,7 +129,7 @@ namespace CommerceStore.Controllers
         [HttpPost]
         public async Task<ActionResult<SalesDTO>> PostSales(Sales sales)
         {
-            sales.DateSold = DateTime.Now;
+            sales.CreatedAt = DateTime.Now;
             _context.Sales.Add(sales);
             await _context.SaveChangesAsync();
 

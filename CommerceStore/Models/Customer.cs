@@ -16,6 +16,8 @@ namespace CommerceStore.Models
         [MaxLength(200)]
         public string Address { get; set; }
 
+        public DateTime CreatedAt { get; set; }
+
         public IList<Sales> ProductSold{ get; set; }
     }
 }

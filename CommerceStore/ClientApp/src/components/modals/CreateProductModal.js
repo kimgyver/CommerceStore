@@ -13,7 +13,6 @@ const CreateProductModal = ({ products, setProducts }) => {
 
   const changeData = async () => {
     let product = { name: name.trim(), price: Number(price) };
-    //console.log(JSON.stringify(product));
 
     const response = await fetch(`api/products`, {
       method: 'POST',

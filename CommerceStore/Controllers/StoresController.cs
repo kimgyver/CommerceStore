@@ -25,7 +25,7 @@ namespace CommerceStore.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Store>>> GetStores()
         {
-            return await _context.Stores.ToListAsync();
+            return await _context.Stores.OrderByDescending(s => s.CreatedAt).ToListAsync();
         }
 
         // GET: api/Stores/5
@@ -80,6 +80,7 @@ namespace CommerceStore.Controllers
         [HttpPost]
         public async Task<ActionResult<Store>> PostStore(Store store)
         {
+            store.CreatedAt = DateTime.Now;
             _context.Stores.Add(store);
             await _context.SaveChangesAsync();
 

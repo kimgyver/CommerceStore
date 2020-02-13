@@ -3,7 +3,11 @@
   position: relative;
 } */
 
-.name-div {
+.name-div,
+.dateSold-div,
+.customer-div,
+.product-div,
+.store-div {
   display: flex;
   flex-direction: column;
 }

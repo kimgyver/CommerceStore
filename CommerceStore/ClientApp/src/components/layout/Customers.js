@@ -9,10 +9,10 @@ const Customers = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    populateWeatherData();
+    populateData();
   }, []);
 
-  const populateWeatherData = async () => {
+  const populateData = async () => {
     const response = await fetch('api/customers');
     const data = await response.json();
     setCustomers(data);

@@ -9,10 +9,10 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    populateWeatherData();
+    populateData();
   }, []);
 
-  const populateWeatherData = async () => {
+  const populateData = async () => {
     const response = await fetch('api/products');
     const data = await response.json();
     setProducts(data);
