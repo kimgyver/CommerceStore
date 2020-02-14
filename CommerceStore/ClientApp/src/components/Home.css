@@ -1,0 +1,9 @@
+.li-indent {
+  list-style-type: circle;
+  margin-left: 30px;
+}
+
+p.writing {
+  font-size: 1.5rem;
+  font-weight: bold;
+}

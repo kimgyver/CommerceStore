@@ -136,7 +136,7 @@ const EditSaleModal = ({ sale, sales, setSales }) => {
   return (
     <Modal
       trigger={
-        <Button color='yellow' onClick={handleOpen}>
+        <Button color='yellow' onClick={handleOpen} className='button-in-table'>
           Edit
         </Button>
       }
@@ -173,7 +173,7 @@ const EditSaleModal = ({ sale, sales, setSales }) => {
                   customers.length > 0 &&
                   customers.map(c => (
                     <option value={c.id} key={c.id}>
-                      {c.name} (id = {c.id})
+                      {c.name} (id={c.id})
                     </option>
                   ))}
               </select>
@@ -189,7 +189,7 @@ const EditSaleModal = ({ sale, sales, setSales }) => {
                   products.length > 0 &&
                   products.map(p => (
                     <option value={p.id} key={p.id}>
-                      {p.name} (id = {p.id})
+                      {p.name} (id={p.id})
                     </option>
                   ))}
               </select>
@@ -205,7 +205,7 @@ const EditSaleModal = ({ sale, sales, setSales }) => {
                   stores.length > 0 &&
                   stores.map(s => (
                     <option value={s.id} key={s.id}>
-                      {s.name} (id = {s.id})
+                      {s.name} (id={s.id})
                     </option>
                   ))}
               </select>

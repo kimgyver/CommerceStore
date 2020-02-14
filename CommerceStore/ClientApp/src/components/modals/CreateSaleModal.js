@@ -71,7 +71,7 @@ const CreateSaleModal = ({ sales, setSales }) => {
   const changeData = async () => {
     //const dateISO = new Date(dateSold.trim()).toISOString();
     const dateISO = date2ISO(new Date(dateSold.trim()));
-    let sale = { dateSold: dateISO, customerId, productId, storeId };
+    //let sale = { dateSold: dateISO, customerId, productId, storeId };
     //console.log(JSON.stringify(sale));
 
     const bodyString = `{ "dateSold": "${dateISO}", "customerId": ${customerId}, "productId": ${productId}, "storeId": ${storeId} }`;
@@ -180,7 +180,7 @@ const CreateSaleModal = ({ sales, setSales }) => {
                   customers.length > 0 &&
                   customers.map(c => (
                     <option value={c.id} key={c.id}>
-                      {c.name} (id = {c.id})
+                      {c.name} (id={c.id})
                     </option>
                   ))}
               </select>
@@ -196,7 +196,7 @@ const CreateSaleModal = ({ sales, setSales }) => {
                   products.length > 0 &&
                   products.map(p => (
                     <option value={p.id} key={p.id}>
-                      {p.name} (id = {p.id})
+                      {p.name} (id={p.id})
                     </option>
                   ))}
               </select>
@@ -212,7 +212,7 @@ const CreateSaleModal = ({ sales, setSales }) => {
                   stores.length > 0 &&
                   stores.map(s => (
                     <option value={s.id} key={s.id}>
-                      {s.name} (id = {s.id})
+                      {s.name} (id={s.id})
                     </option>
                   ))}
               </select>

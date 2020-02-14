@@ -80,7 +80,7 @@ const Sales = () => {
 
   return (
     <div>
-      <h3 id='tabelLabel'>Sales</h3>
+      {/* <h3 id='tabelLabel'>Sales</h3> */}
       <CreateSaleModal sales={sales} setSales={setSales} />
       <p />
       {contents}

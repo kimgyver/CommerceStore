@@ -64,7 +64,7 @@ const Customers = () => {
 
   return (
     <div>
-      <h3 id='tabelLabel'>Customers</h3>
+      {/* <h3 id='tabelLabel'>Customers</h3> */}
       <CreateCustomerModal customers={customers} setCustomers={setCustomers} />
       <p />
       {contents}

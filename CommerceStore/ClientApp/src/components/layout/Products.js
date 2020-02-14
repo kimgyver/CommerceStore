@@ -64,7 +64,7 @@ const Products = () => {
 
   return (
     <div>
-      <h3 id='tabelLabel'>Products</h3>
+      {/* <h3 id='tabelLabel'>Products</h3> */}
       <CreateProductModal products={products} setProducts={setProducts} />
       <p />
       {contents}

@@ -2,4 +2,12 @@
   .button-in-table {
     padding: 0.7em 0.3rem !important;
   }
+  .table.sales {
+    font-size: 0.8rem;
+  }
+
+  table.sales th,
+  .table.sales td {
+    padding: 0.05rem;
+  }
 }
