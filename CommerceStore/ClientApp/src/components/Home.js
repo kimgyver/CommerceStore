@@ -34,7 +34,7 @@ export class Home extends Component {
             sale)
           </li>
           <li>DB Schema</li>
-          <img src='/dbschema.png' alt='' />
+          <img src='/dbschema.png' alt='' style={{ maxWidth: '100%' }} />
           <li>Note</li>
           <li className='li-indent'>
             All data is provided by descending order of creation date.
@@ -79,7 +79,7 @@ export class Home extends Component {
 
         <br />
         <hr />
-        <div>Design and source was made by Jason Jinyoung KIM</div>
+        <div>Design and coding was conducted by Jason Jinyoung KIM</div>
         <div>
           Github url:{' '}
           <a href='https://github.com/kimgyver/CommerceStore'>

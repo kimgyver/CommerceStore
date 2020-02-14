@@ -61,7 +61,6 @@ const Stores = () => {
 
   return (
     <div>
-      {/* <h3 id='tabelLabel'>Stores</h3> */}
       <CreateStoreModal stores={stores} setStores={setStores} />
       <p />
       {contents}

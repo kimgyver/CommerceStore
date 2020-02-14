@@ -2,6 +2,7 @@
 import { Button, Modal, Input } from 'semantic-ui-react';
 import './Modals.css';
 import '../layout/Layout.css';
+import { date2string, string2date, date2ISO } from '../../utility/date';
 
 const CreateSaleModal = ({ sales, setSales }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -18,7 +19,7 @@ const CreateSaleModal = ({ sales, setSales }) => {
   useEffect(() => {
     if (modalOpen) {
       populateData();
-      setDateSold(new Date().toLocaleString());
+      setDateSold(date2string(new Date()));
     }
   }, [modalOpen]);
 
@@ -50,27 +51,9 @@ const CreateSaleModal = ({ sales, setSales }) => {
   const handleOpen = () => setModalOpen(true);
   const handleClose = () => setModalOpen(false);
 
-  const date2ISO = date => {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const minutes = date.getMinutes();
-    const hours = date.getHours();
-    const seconds = date.getSeconds();
-    let text = '';
-    text += `${year}-${month < 10 ? `0${month}` : month}-${
-      day < 10 ? `0${day}` : day
-    }`;
-    text += `T${hours < 10 ? `0${hours}` : hours}:${
-      minutes < 10 ? `0${minutes}` : minutes
-    }:${seconds < 10 ? `0${seconds}` : seconds}`;
-
-    return text;
-  };
-
   const changeData = async () => {
-    //const dateISO = new Date(dateSold.trim()).toISOString();
-    const dateISO = date2ISO(new Date(dateSold.trim()));
+    const date = string2date(dateSold.trim());
+    const dateISO = date2ISO(date);
     //let sale = { dateSold: dateISO, customerId, productId, storeId };
     //console.log(JSON.stringify(sale));
 
@@ -161,7 +144,9 @@ const CreateSaleModal = ({ sales, setSales }) => {
           {/* <Header>Default Profile Image</Header> */}
           <form onSubmit={onSubmit}>
             <div className='dateSold-div'>
-              <label htmlFor='dateSold'>Date Sold: </label>
+              <label htmlFor='dateSold'>
+                Date Sold: (DD/MM/YYYY HH:mm:ss){' '}
+              </label>
               <Input
                 name='dateSold'
                 value={dateSold}
